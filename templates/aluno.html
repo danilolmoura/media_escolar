@@ -1,0 +1,45 @@
+{% extends "main.html" %}
+
+{% block content %}
+<div class="container">
+    <div class="display-5">
+        Bem-Vindo(a) Alunos!
+    </div>
+    <br>
+    <form action="/aluno" method="POST">
+        <label for="nome" class="form-label">
+            Nome:
+        </label>
+        <input type="text" name="nome" class="form-control" required>
+        <br>
+        <br>
+        <label for="serie">
+            Série:
+        </label>
+        <input type="number" name="serie" required class="form-control">
+        <br>
+        <br>
+
+        <label for="escola">
+            Escola:
+        </label>
+
+        <select class="form-select" name="escola_id" size="3" aria-label="Size 3 select example" required>
+            {% for escola in escolas %}
+            <option value="{{escola.id}}">
+                {{escola.nome}}
+            </option>
+            {% endfor %}
+        </select>
+        <br>
+        <br>
+        <button type="submit">
+            Enviar
+        </button>
+
+
+    </form>
+</div>
+
+
+{% endblock %}

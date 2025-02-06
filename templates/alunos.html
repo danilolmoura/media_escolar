@@ -1,0 +1,41 @@
+{% extends "main.html" %}
+
+{% block content %}
+<div class="container">
+    <div class="display-5">
+        Bem-Vindo(a) Alunos!
+    </div>
+    <br>
+
+
+
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    Nome
+                </th>
+                <th>
+                    Série
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for aluno in alunos %}
+            <tr>
+                <td>
+                    {{aluno.nome}}
+                </td>
+                <td>{{aluno.serie}}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <br>
+
+
+
+
+</div>
+{% endblock %}

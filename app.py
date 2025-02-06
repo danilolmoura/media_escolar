@@ -25,6 +25,14 @@ class Materia(db.Model):
     serie=db.Column(db.Integer,nullable=False)
     escola_id=db.Column(db.Integer,db.ForeignKey("escola.id"),nullable=False) 
     escola=db.relationship("Escola",backref=db.backref("materias",lazy=True)) 
+
+class Aluno(db.Model):
+    id=db.Column(db.Integer, primary_key=True)
+    nome=db.Column(db.String, nullable=False)
+    serie=db.Column(db.Integer,nullable=False)
+    escola_id=db.Column(db.Integer,db.ForeignKey("escola.id"),nullable=False) 
+    escola=db.relationship("Escola",backref=db.backref("alunos",lazy=True)) 
+    
     
 ## Cria tabelas do banco
 with app.app_context():
@@ -69,9 +77,35 @@ def cadastrar_materia():
     
         return redirect(url_for("escolas"))
 
+@app.route("/alunos") 
+def alunos():
+    alunos=Aluno.query.all()
+    return render_template('alunos.html',alunos=alunos) 
+
+@app.route("/aluno", methods=["GET","POST"])
+def cadastrar_alunos():
+    if request.method=="POST":
+    
+        nome=request.form.get("nome")
+        if not nome:
+            return "O nome e a série é obrigatório"
+        serie=request.form.get("serie")
+        escola_id=request.form.get("escola_id")
+        aluno=Aluno(nome=nome, serie=serie, escola_id=escola_id)
+        
+        db.session.add(aluno)
+        db.session.commit()
+    
+        return redirect(url_for("alunos"))
+    else:
+        escolas=Escola.query.all()
+        return render_template('aluno.html',escolas=escolas)
+    
+
 
 
 if __name__ == '__main__':
     app.run(debug=True, host="0.0.0.0", port=4000)
+
 
 
