@@ -32,6 +32,17 @@ class Aluno(db.Model):
     serie=db.Column(db.Integer,nullable=False)
     escola_id=db.Column(db.Integer,db.ForeignKey("escola.id"),nullable=False) 
     escola=db.relationship("Escola",backref=db.backref("alunos",lazy=True)) 
+
+class Nota(db.Model):
+    id=db.Column(db.Integer, primary_key=True)
+    valor=db.Column(db.Integer, nullable=False)
+    trimestre=db.Column(db.Integer,nullable=False)
+    materia_id=db.Column(db.Integer,db.ForeignKey("materia.id"),nullable=False) 
+    materia=db.relationship("Materia",backref=db.backref("notas",lazy=True)) 
+    aluno_id=db.Column(db.Integer,db.ForeignKey("aluno.id"),nullable=False) 
+    aluno=db.relationship("Aluno",backref=db.backref("notas",lazy=True)) 
+
+
     
     
 ## Cria tabelas do banco
@@ -43,10 +54,12 @@ with app.app_context():
 def index():
     return render_template('index.html')
 
+
 @app.route("/escolas") 
 def escolas():
     escolas=Escola.query.all()
     return render_template('escolas.html',escolas=escolas) 
+
 
 @app.route("/cadastrar_escola", methods=["GET", "POST"])
 def cadastrar_escola():
@@ -62,7 +75,8 @@ def cadastrar_escola():
     else: 
         escolas=Escola.query.all()
         return render_template('escola.html',escolas=escolas)
-    
+
+
 @app.route("/cadastrar_materia", methods=["POST"])
 def cadastrar_materia():
     if request.method=="POST":
@@ -77,10 +91,12 @@ def cadastrar_materia():
     
         return redirect(url_for("escolas"))
 
+
 @app.route("/alunos") 
 def alunos():
     alunos=Aluno.query.all()
     return render_template('alunos.html',alunos=alunos) 
+
 
 @app.route("/aluno", methods=["GET","POST"])
 def cadastrar_alunos():
@@ -101,6 +117,35 @@ def cadastrar_alunos():
         escolas=Escola.query.all()
         return render_template('aluno.html',escolas=escolas)
     
+    
+@app.route("/cadastrar_nota", methods=["GET", "POST"])
+def cadastrar_nota():
+    if request.method=="POST":
+        trimestre=request.form.get("trimestre")
+        materia_id=request.form.get('materia_id')
+        valor=request.form.get('nota') 
+        aluno_id=request.form.get('aluno_id')
+
+
+
+     
+        nota=Nota(trimestre=trimestre,materia_id=materia_id,valor=valor,aluno_id=aluno_id)
+        db.session.add(nota)
+        db.session.commit()
+        notas=Nota.query.all()
+        return render_template('alunos.html') 
+        
+    else: 
+        notas=Nota.query.all() 
+        # import pdb 
+        # pdb.set_trace()
+        alunos=Aluno.query.all()   
+        aluno_id=request.args.get('aluno_id')
+        aluno=Aluno.query.filter(Aluno.id==aluno_id).first() 
+        return render_template('nota.html',escola=aluno.escola ,aluno=aluno)
+
+    
+# @app.route("/cadastrar_nota:<aluno_id>" , methods=['GET', "POST"])
 
 
 

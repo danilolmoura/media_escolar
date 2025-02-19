@@ -7,32 +7,64 @@
     </div>
     <br>
 
+    {% for aluno in alunos %}
+
+    <h3>
+        {{aluno.nome}} {{aluno.serie}}º
+    </h3>
 
 
-
+    <a href="/cadastrar_nota?aluno_id={{aluno.id}}">Cadastrar Nota</a>
     <table class="table">
         <thead>
             <tr>
                 <th>
-                    Nome
+                    Matéria
+
                 </th>
                 <th>
-                    Série
+                    Nota
                 </th>
+
+                <th>
+                    Trimestre
+                </th>
+
             </tr>
         </thead>
         <tbody>
-            {% for aluno in alunos %}
+            {% for nota in aluno.notas %}
             <tr>
                 <td>
-                    {{aluno.nome}}
+                    {{nota.materia.nome}}
+
                 </td>
-                <td>{{aluno.serie}}</td>
+                <td>
+                    {% if nota.valor>=7 %} <span class="text-success">{{nota.valor}}</span>
+
+                    {%elif nota.valor<7 and nota.valor>=5 %} <span class="text-warning">{{nota.valor}}</span>
+
+                        {% else %} <span class="text-danger">{{nota.valor}}</span>
+
+                        {% endif %} </td>
+
+                <td>
+                    {{nota.trimestre}}
+                </td>
             </tr>
+
             {% endfor %}
         </tbody>
     </table>
+
+    {% endfor %}
+
+
+
+
     <br>
+
+
 
 
 

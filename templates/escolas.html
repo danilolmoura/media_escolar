@@ -36,10 +36,14 @@
     <br>
     <form action="/cadastrar_materia" method="POST">
         <input type="hidden" name="escola_id" value={{escola.id}}>
-        <label for="nome"></label>
+        <label for="nome">
+            materia
+        </label>
         <input type="text" name="nome">
 
-        <label for="serie"></label>
+        <label for="serie">
+            serie
+        </label>
         <input type="number" name="serie">
         <button type="submit">
             Adicionar

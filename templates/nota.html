@@ -1,0 +1,64 @@
+{% extends "main.html" %}
+
+{% block content %}
+<div class="container">
+    <div class="display-5">
+        Cadastre sua nota Abaixo!
+    </div>
+    <br>
+    <label for="aluno_id">
+        <b>
+            Aluno: {{aluno.nome}}
+        </b>
+    </label>
+    <br>
+    <br>
+    <form action="/cadastrar_nota" method="POST">
+        <input type="hidden" name="aluno_id" value="{{aluno.id}}">
+
+        <label for="trimestre">
+            Trimestre:
+        </label>
+        <input type="number" name="trimestre" required class="form-control">
+        <br>
+        <br>
+
+        <label for="nota">
+            Nota:
+        </label>
+        <input type="number" name="nota" required class="form-control">
+        <br>
+        <br>
+
+
+
+
+
+
+        <label for="materia_id">
+            Matérias:
+        </label>
+        <select class="form-select" name="materia_id" size="3" aria-label="Size 3 select example" required>
+            {% for materia in aluno.escola.materias %}
+            <option value="{{materia.id}}">
+                {{materia.nome}}
+            </option>
+            {% endfor %}
+        </select>
+        <br>
+        <br>
+
+
+
+        <button type="submit">
+            Enviar
+        </button>
+
+
+
+
+    </form>
+</div>
+
+
+{% endblock %}
