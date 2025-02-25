@@ -1,0 +1,84 @@
+/* Importa uma fonte do Google para um visual mais moderno */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
+
+/* Reset básico para remover margens e paddings padrão */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+/* Estilizando o corpo da página */
+body {
+    background-color: #f4f4f4;
+    color: #333;
+    text-align: center;
+}
+
+/* Container principal */
+.container {
+    width: 90%;
+    max-width: 800px;
+    margin: 20px auto;
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Estilizando a tabela */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+th, td {
+    border: 1px solid #ddd;
+    padding: 12px;
+    text-align: center;
+}
+
+/* Cabeçalhos da tabela */
+th {
+    background-color: #007bff;
+    color: white;
+}
+
+/* Alternância de cores entre as linhas */
+tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+/* Cores das notas */
+.nota-ruim {
+    color: red;
+    font-weight: bold;
+}
+
+.nota-media {
+    color: orange;
+}
+
+.nota-boa {
+    color: green;
+    font-weight: bold;
+}
+
+/* Botões */
+.botao {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: 0.3s;
+    display: inline-block;
+    margin-top: 20px;
+}
+
+.botao:hover {
+    background-color: #0056b3;
+}

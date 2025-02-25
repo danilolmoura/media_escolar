@@ -3,9 +3,62 @@
 <!-- {% block title %}Home - Flask App{% endblock %} -->
 
 {% block content %}
-<div class="container">
-    <div class="display-5">
-        Bem-Vindo!
+<div class="container mt-4">
+    <div class="text-center mb-5">
+        <h1 class="display-4 text-primary fw-bold">Bem-Vindo à Nossa Plataforma!</h1>
+        <p class="lead text-muted">Sua jornada começa aqui. Explore, cadastre e gerencie com facilidade.</p>
+    </div>
+
+    <div class="row">
+        <!-- Informações sobre a plataforma -->
+        <div class="col-lg-6 mb-4">
+            <div class="card shadow-sm border-primary">
+                <div class="card-header bg-primary text-white">
+                    <h4>Sobre a Plataforma</h4>
+                </div>
+                <div class="card-body">
+                    <p class="card-text">Nossa plataforma oferece soluções completas para escolas, alunos e educadores. Aqui você pode cadastrar escolas, alunos, matérias e acompanhar o desempenho acadêmico de forma prática e intuitiva.</p>
+                    <ul>
+                        <li><strong>Fácil de usar</strong>: Interface simples e intuitiva.</li>
+                        <li><strong>Rápido</strong>: Acesso rápido às informações essenciais.</li>
+                        <li><strong>Segurança</strong>: Proteção total para seus dados.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Contato -->
+        <div class="col-lg-6 mb-4">
+            <div class="card shadow-sm border-success">
+                <div class="card-header bg-success text-white">
+                    <h4>Contato</h4>
+                </div>
+                <div class="card-body">
+                    <p class="card-text">Se você tiver alguma dúvida ou precisar de assistência, entre em contato conosco através dos seguintes meios:</p>
+                    <ul class="list-unstyled">
+                        <li><strong>Email:</strong> <a href="rebekahethelpacagnella@gmail.com" class="text-decoration-none text-primary">rebekahethelpacagnella@gmail.com</a></li>
+                        <li><strong>Telefone:</strong> <a href="tel:+5516982202167" class="text-decoration-none text-primary">(16) 98220-2167</a></li>
+                        <li><strong></strong></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Redes Sociais -->
+    <div class="text-center mt-5">
+        <h4>Nos Siga nas Redes Sociais!</h4>
+        <div>
+            <a href="https://facebook.com" class="btn btn-primary btn-lg mx-2" target="_blank">
+                <i class="bi bi-facebook"></i> Facebook
+            </a>
+            <a href="https://instagram.com" class="btn btn-danger btn-lg mx-2" target="_blank">
+                <i class="bi bi-instagram"></i> Instagram
+            </a>
+            <a href="https://twitter.com" class="btn btn-info btn-lg mx-2" target="_blank">
+                <i class="bi bi-twitter"></i> Twitter
+            </a>
+        </div>
     </div>
 </div>
 {% endblock %}

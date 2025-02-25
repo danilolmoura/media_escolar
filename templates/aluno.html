@@ -1,45 +1,35 @@
 {% extends "main.html" %}
 
 {% block content %}
-<div class="container">
-    <div class="display-5">
-        Bem-Vindo(a) Alunos!
+<div class="container mt-4">
+    <div class="text-center mb-4">
+        <h2 class="display-5 text-primary fw-bold">Bem-Vindo(a) Alunos!</h2>
+        <p class="text-muted">Preencha os campos abaixo para cadastrar um novo aluno.</p>
     </div>
-    <br>
-    <form action="/aluno" method="POST">
-        <label for="nome" class="form-label">
-            Nome:
-        </label>
-        <input type="text" name="nome" class="form-control" required>
-        <br>
-        <br>
-        <label for="serie">
-            Série:
-        </label>
-        <input type="number" name="serie" required class="form-control">
-        <br>
-        <br>
 
-        <label for="escola">
-            Escola:
-        </label>
+    <form action="/aluno" method="POST" class="border p-4 rounded shadow-sm">
+        <div class="mb-3">
+            <label for="nome" class="form-label">Nome:</label>
+            <input type="text" name="nome" class="form-control" required>
+        </div>
 
-        <select class="form-select" name="escola_id" size="3" aria-label="Size 3 select example" required>
-            {% for escola in escolas %}
-            <option value="{{escola.id}}">
-                {{escola.nome}}
-            </option>
-            {% endfor %}
-        </select>
-        <br>
-        <br>
-        <button type="submit">
-            Enviar
-        </button>
+        <div class="mb-3">
+            <label for="serie" class="form-label">Série:</label>
+            <input type="number" name="serie" class="form-control" required>
+        </div>
 
+        <div class="mb-3">
+            <label for="escola" class="form-label">Escola:</label>
+            <select class="form-select" name="escola_id" size="3" aria-label="Size 3 select example" required>
+                {% for escola in escolas %}
+                <option value="{{ escola.id }}">{{ escola.nome }}</option>
+                {% endfor %}
+            </select>
+        </div>
 
+        <div class="text-center">
+            <button type="submit" class="btn btn-primary btn-lg">Enviar</button>
+        </div>
     </form>
 </div>
-
-
 {% endblock %}

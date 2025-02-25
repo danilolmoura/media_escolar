@@ -1,16 +1,26 @@
 {% extends "main.html" %}
 
 {% block content %}
-<div class="container">
-    <div class="form">
-        Cadastre-se á Escola
-        <form action="/cadastrar_escola" method="POST">
-            <input type="text" name="nome" placeholder="Nome da Escola">
-            <button class="btn btn-primary" type="submit"> Cadastrar
-            </button>
-        </form>
+<div class="container mt-4">
+    <div class="text-center mb-4">
+        <h2 class="text-primary fw-bold">Cadastre-se à Escola</h2>
+        <p class="text-muted">Preencha o nome da escola para cadastrá-la no sistema.</p>
 
+        <form action="/cadastrar_escola" method="POST" class="border p-4 rounded shadow-sm">
+            <div class="mb-3">
+                <input type="text" name="nome" placeholder="Nome da Escola" class="form-control" required>
+            </div>
+            <button class="btn btn-primary" type="submit">Cadastrar</button>
+        </form>
     </div>
-    escolas cadastradas:{{escolas}}
+
+    <div class="mt-5">
+        <h4 class="text-dark">Escolas Cadastradas:</h4>
+        <ul class="list-group">
+            {% for escola in escolas %}
+            <li class="list-group-item">{{ escola.nome }}</li>
+            {% endfor %}
+        </ul>
+    </div>
 </div>
 {% endblock %}
