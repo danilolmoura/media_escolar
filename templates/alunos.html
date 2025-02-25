@@ -20,9 +20,11 @@
                 <table class="table table-striped table-hover text-center">
                     <thead class="table-dark">
                         <tr>
+
                             <th>Matéria</th>
                             <th>Nota</th>
-                            <th>Trimestre</th>
+                            <th>Trimestre</th> 
+                            <th>Ações</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -38,6 +40,15 @@
                                 </span>
                             </td>
                             <td>{{ nota.trimestre }}º</td>
+                            
+                                <td>
+                                    
+                                 
+                                        <a href="/deletar_nota?nota_id={{ nota.id }}" class="btn btn-danger btn-sm">Excluir Nota</a>
+                                 
+                                </td>
+
+                            
                         </tr>
                         {% endfor %}
                     </tbody>

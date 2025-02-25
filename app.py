@@ -147,7 +147,13 @@ def cadastrar_nota():
     
 # @app.route("/cadastrar_nota:<aluno_id>" , methods=['GET', "POST"])
 
-
+@app.route("/deletar_nota", methods=["GET"])
+def deletar_nota():
+    id=request.args.get("nota_id")
+    nota=Nota.query.get(id)
+    db.session.delete(nota)
+    db.session.commit()
+    return redirect(url_for("alunos"))
 
 if __name__ == '__main__':
     app.run(debug=True, host="0.0.0.0", port=4000)
