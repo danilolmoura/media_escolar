@@ -25,14 +25,13 @@
                 <span class="fs-4">Media Escolar</span>
             </a>
 
-            <ul class="nav nav-pills">
-                <li class="nav-item"><a href="#" class="nav-link active" aria-current="page">Início</a></li>
+            <ul class="nav nav-pills" id="navMenu">
+                <li class="nav-item"><a href="/" class="nav-link" aria-current="page">Início</a></li>
                 <li class="nav-item"><a href="/escolas" class="nav-link">Escolas</a></li>
                 <li class="nav-item"><a href="/cadastrar_escola" class="nav-link">+ Escola</a></li>
                 <li class="nav-item"><a href="/alunos" class="nav-link">Alunos</a></li>
-                <li class="nav-item"><a href="#" class="nav-link">Calcular Média</a></li>
                 <li class="nav-item"><a href="/aluno" class="nav-link">+Alunos</a></li>
-
+                <li class="nav-item"><a href="#" class="nav-link">Calcular Média</a></li>
             </ul>
         </header>
 
@@ -41,6 +40,27 @@
         </main>
     </div>
 
+    <script>
+        // Quando a página carregar, adicionar a classe 'active' ao item correto
+        document.addEventListener("DOMContentLoaded", function() {
+            const navLinks = document.querySelectorAll('.nav-link');
+            
+            // Remove 'active' de todos os links
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+            });
+
+            // Adiciona 'active' ao link da página atual
+            const currentUrl = window.location.pathname;
+            console.log(currentUrl);
+            navLinks.forEach(link => {
+                if (link.getAttribute('href') === currentUrl) {
+                    link.classList.add('active');
+                }
+            });
+        });
+    </script>
 </body>
+
 
 </html>

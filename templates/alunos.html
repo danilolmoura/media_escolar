@@ -22,33 +22,53 @@
                         <tr>
 
                             <th>Matéria</th>
-                            <th>Nota</th>
-                            <th>Trimestre</th> 
+                            <th>Trimestre 1 </th>
+                            <th>Trimestre 2</th>
+                            <th>Trimestre 3</th>
+                            <th>Média</th>
                             <th>Ações</th>
+
                         </tr>
                     </thead>
                     <tbody>
                         {% for nota in aluno.notas %}
                         <tr>
                             <td>{{ nota.materia.nome }}</td>
+
                             <td>
-                                <span class="border rounded px-2 py-1 
-                                    {% if nota.valor >= 7 %}border-success text-success bg-success bg-opacity-25 fw-bold
-                                     {% elif nota.valor >= 5 %}border-warning text-warning bg-warning bg-opacity-25 fw-bold
-                                     {% else %}border-danger text-danger bg-danger bg-opacity-25 fw-bold{% endif %}">
-                                    {{ nota.valor }}
+                                <span class="{{nota.css(nota.nota1)}}">
+                                    {{ nota.nota1 | default("")}}
                                 </span>
                             </td>
-                            <td>{{ nota.trimestre }}º</td>
-                            
-                                <td>
-                                    
-                                 
-                                        <a href="/deletar_nota?nota_id={{ nota.id }}" class="btn btn-danger btn-sm">Excluir Nota</a>
-                                 
-                                </td>
 
+                            <td>
+                                <span class="{{nota.css(nota.nota2)}}">
+                                    {{ nota.nota2 | default("")}}
+                                </span>
+                            </td>
+
+                            <td>
+                                <span class="{{nota.css(nota.nota3)}}">
+                                    {{ nota.nota3 | default("")}}
+                                </span>
+                            </td>
+
+                            <td>
+                                <span class="{{nota.css(nota.media())}}">
+                                    {{ nota.media() | default("")}}
+                                </span>
+                            </td>
                             
+                            <td>
+                                <a href="/deletar_nota?nota_id={{ nota.id }}" class="btn btn-danger btn-sm">Excluir
+                                    Nota</a>
+                                <a href="/atualizar_nota?nota_id={{ nota.id }}" class="btn btn-primary btn-sm">Editar
+                                    Nota</a>
+                            </td>
+
+
+
+
                         </tr>
                         {% endfor %}
                     </tbody>
@@ -60,3 +80,5 @@
     {% endfor %}
 </div>
 {% endblock %}
+
+

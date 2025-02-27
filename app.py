@@ -35,14 +35,42 @@ class Aluno(db.Model):
 
 class Nota(db.Model):
     id=db.Column(db.Integer, primary_key=True)
-    valor=db.Column(db.Integer, nullable=False)
-    trimestre=db.Column(db.Integer,nullable=False)
+    nota1=db.Column(db.Integer, nullable=True)
+    nota2=db.Column(db.Integer, nullable=True)
+    nota3=db.Column(db.Integer, nullable=True)
     materia_id=db.Column(db.Integer,db.ForeignKey("materia.id"),nullable=False) 
-    materia=db.relationship("Materia",backref=db.backref("notas",lazy=True)) 
+    materia=db.relationship("Materia",backref=db.backref("nota",lazy=True)) 
     aluno_id=db.Column(db.Integer,db.ForeignKey("aluno.id"),nullable=False) 
-    aluno=db.relationship("Aluno",backref=db.backref("notas",lazy=True)) 
+    aluno=db.relationship("Aluno",backref=db.backref("notas",lazy=True))    
 
+    def media(self):
+        media=(self.default(self.nota1)+
+                self.default(self.nota2)+
+                self.default(self.nota3))/3
+        return round(media,1)
+    
+    
+    def default(self, value):
+       return value or 0
+    
 
+    def css(self, nota):
+        
+        if (nota==None or nota==""):
+        
+            return "border rounded px-2 py-1 border-secondary text-secondary bg-secondary bg-opacity-25 fw-bold"
+        elif (nota >= 7):
+            return "border rounded px-2 py-1 border-success text-success bg-success bg-opacity-25 fw-bold"
+        elif (nota >= 5):
+            return "border rounded px-2 py-1 border-warning text-warning bg-warning bg-opacity-25 fw-bold"
+        else:
+            return "border rounded px-2 py-1 border-danger text-danger bg-danger bg-opacity-25 fw-bold"
+         
+        
+
+        
+        
+  
     
     
 ## Cria tabelas do banco
@@ -121,15 +149,16 @@ def cadastrar_alunos():
 @app.route("/cadastrar_nota", methods=["GET", "POST"])
 def cadastrar_nota():
     if request.method=="POST":
-        trimestre=request.form.get("trimestre")
+        nota1=request.form.get('nota1')
+        nota2=request.form.get('nota2')
+        nota3=request.form.get('nota3')
         materia_id=request.form.get('materia_id')
-        valor=request.form.get('nota') 
         aluno_id=request.form.get('aluno_id')
 
 
 
      
-        nota=Nota(trimestre=trimestre,materia_id=materia_id,valor=valor,aluno_id=aluno_id)
+        nota=Nota(nota1=nota1, nota2=nota2, nota3=nota3, materia_id=materia_id, aluno_id=aluno_id)
         db.session.add(nota)
         db.session.commit()
         notas=Nota.query.all()
@@ -142,7 +171,7 @@ def cadastrar_nota():
         alunos=Aluno.query.all()   
         aluno_id=request.args.get('aluno_id')
         aluno=Aluno.query.filter(Aluno.id==aluno_id).first() 
-        return render_template('nota.html',escola=aluno.escola ,aluno=aluno)
+        return render_template('nota.html',escola=aluno.escola,aluno=aluno)
 
     
 # @app.route("/cadastrar_nota:<aluno_id>" , methods=['GET', "POST"])
