@@ -17,8 +17,8 @@
             </div>
 
             <div class="table-responsive mt-3">
-                <table class="table table-striped table-hover text-center">
-                    <thead class="table-dark">
+                <table class="table table-light table-hover text-center">
+                    <thead class="table-primary">
                         <tr>
 
                             <th>Matéria</th>
@@ -26,45 +26,92 @@
                             <th>Trimestre 2</th>
                             <th>Trimestre 3</th>
                             <th>Média</th>
+                            <th>Nota Esperada</th>
                             <th>Ações</th>
+                         
 
                         </tr>
                     </thead>
                     <tbody>
                         {% for nota in aluno.notas %}
-                        <tr>
-                            <td>{{ nota.materia.nome }}</td>
+                        <tr class="text-center">
+                            <td> <b> {{ nota.materia.nome }} </b></td>
+                            <form action="/atualizar_nota" method="POST">
+                                <input type="hidden" name="nota_id" value="{{nota.id}}">
+                  
+                                
+                                <td>
+                                    <div class="d-flex justify-content-center align-items-center">
+                                        <span class="{{nota.css(nota.nota1)}}" data-bs-toggle="collapse"
+                                            data-bs-target="#editableInput1-{{nota.id}}" aria-expanded="false"
+                                            aria-controls="editableInput1-{{nota.id}}" style="cursor: pointer;">
+                                            {{ nota.nota1 | default("")}}
+                                        </span>
+                                
+                                        <div class="collapse ms-2" id="editableInput1-{{nota.id}}">
+                                            <input type="number" name="nota1" value="{{nota.nota1}}"
+                                                class="form-control form-control-sm w-50">
+                                        </div>
+                                    </div>
+                                </td>
+                                
+                                <td>
+                                    <div class="d-flex justify-content-center align-items-center">
+                                        <span class="{{nota.css(nota.nota2)}}" data-bs-toggle="collapse"
+                                            data-bs-target="#editableInput2-{{nota.id}}" aria-expanded="false"
+                                            aria-controls="editableInput2-{{nota.id}}" style="cursor: pointer;">
+                                            {{ nota.nota2 | default("")}}
+                                        </span>
+                                
+                                        <div class="collapse ms-2" id="editableInput2-{{nota.id}}">
+                                            <input type="number" name="nota2" value="{{nota.nota2}}"
+                                                class="form-control form-control-sm w-50">
+                                        </div>
+                                    </div>
+                                </td>
+                                
+                                    <td class="text-center">
+                                        <div class="d-flex justify-content-center align-items-center">
+                                            <span class="{{nota.css(nota.nota3)}}" data-bs-toggle="collapse"
+                                                data-bs-target="#editableInput3-{{nota.id}}" aria-expanded="false"
+                                                aria-controls="editableInput3-{{nota.id}}" style="cursor: pointer;">
+                                                {{ nota.nota3 | default("")}}
+                                            </span>
 
-                            <td>
-                                <span class="{{nota.css(nota.nota1)}}">
-                                    {{ nota.nota1 | default("")}}
-                                </span>
-                            </td>
+                                    
+                                            <div class="collapse ms-2" id="editableInput3-{{nota.id}}">
+                                                <input type="number" name="nota3" value="{{nota.nota3}}"
+                                                    class="form-control form-control-sm w-50">
+                                            </div>
+                                        </div>
+                                    </td>
+                                
 
-                            <td>
-                                <span class="{{nota.css(nota.nota2)}}">
-                                    {{ nota.nota2 | default("")}}
-                                </span>
-                            </td>
+                                <td>
+                                    <span class="{{nota.css(nota.media())}}">
+                                        {{ nota.media() | default("")}}
+                                    </span>
+                                </td>
 
-                            <td>
-                                <span class="{{nota.css(nota.nota3)}}">
-                                    {{ nota.nota3 | default("")}}
-                                </span>
-                            </td>
+                                <td>
+                                    {% set nota_restante = 21 - ((nota.nota1 or 0) + (nota.nota2 or 0) + (nota.nota3 or 0)) %}
+                                    
+                                    {% if nota_restante <= 0 %}
+                                        Já Passou!
+                                    {% else %}
+                                        {{ nota_restante }}
+                                    {% endif %}
+                                </td>
+                                
+                                <td>
+                                    <a href="/deletar_nota?nota_id={{ nota.id }}" class="btn btn-danger btn-sm">Excluir
+                                        Nota</a>
 
-                            <td>
-                                <span class="{{nota.css(nota.media())}}">
-                                    {{ nota.media() | default("")}}
-                                </span>
-                            </td>
+                                    <input type="submit" class="btn btn-primary btn-sm" value="Atualizar">
+                                    
+                                </td>
+                            </form>
                             
-                            <td>
-                                <a href="/deletar_nota?nota_id={{ nota.id }}" class="btn btn-danger btn-sm">Excluir
-                                    Nota</a>
-                                <a href="/atualizar_nota?nota_id={{ nota.id }}" class="btn btn-primary btn-sm">Editar
-                                    Nota</a>
-                            </td>
 
 
 
@@ -80,5 +127,3 @@
     {% endfor %}
 </div>
 {% endblock %}
-
-

@@ -184,6 +184,21 @@ def deletar_nota():
     db.session.commit()
     return redirect(url_for("alunos"))
 
+@app.route("/atualizar_nota", methods=["POST"])
+def atualizar_nota():
+    id=request.form.get("nota_id")
+    nota1=request.form.get("nota1")
+    nota2=request.form.get("nota2")
+    nota3=request.form.get("nota3")
+    nota=Nota.query.get(id)
+    nota.nota1=nota1
+    nota.nota2=nota2
+    nota.nota3=nota3
+    db.session.add(nota)
+    db.session.commit()
+    return redirect(url_for("alunos"))
+
+
 if __name__ == '__main__':
     app.run(debug=True, host="0.0.0.0", port=4000)
 
