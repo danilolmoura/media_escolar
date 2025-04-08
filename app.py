@@ -3,71 +3,29 @@ import random
 
 from flask import Flask, redirect, render_template, request, url_for
 from flask_sqlalchemy import SQLAlchemy
-
+from models import db, Aluno, Escola, Materia
+from werkzeug.security import generate_password_hash, check_password_hash
+from flask_login import LoginManager, login_user, login_required, current_user, logout_user
 app = Flask(__name__)
 
 
 # Configura banco de dados
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///banco_notas.db'
 app.config['SQLALCHEMY_TRACK_NOTIFICATIONS'] = True
-db = SQLAlchemy(app)
+app.config['SECRET_KEY']="*****112" 
+db.init_app(app) 
+login_manager=LoginManager()
+login_manager. init_app(app)
 
-class Escola(db.Model):
-    id=db.Column(db.Integer, primary_key=True)
-    nome=db.Column(db.String, nullable=False)
+@login_manager.user_loader
+def load_user (user_id):
+    return Aluno.query.get(int(user_id))
 
-    def __repr__(self):
-        return f"<Escola {self.id} {self.nome}>"
-    
-class Materia(db.Model):
-    id=db.Column(db.Integer, primary_key=True)
-    nome=db.Column(db.String, nullable=False)
-    serie=db.Column(db.Integer,nullable=False)
-    escola_id=db.Column(db.Integer,db.ForeignKey("escola.id"),nullable=False) 
-    escola=db.relationship("Escola",backref=db.backref("materias",lazy=True)) 
-
-class Aluno(db.Model):
-    id=db.Column(db.Integer, primary_key=True)
-    nome=db.Column(db.String, nullable=False)
-    serie=db.Column(db.Integer,nullable=False)
-    escola_id=db.Column(db.Integer,db.ForeignKey("escola.id"),nullable=False) 
-    escola=db.relationship("Escola",backref=db.backref("alunos",lazy=True)) 
-
-class Nota(db.Model):
-    id=db.Column(db.Integer, primary_key=True)
-    nota1=db.Column(db.Integer, nullable=True)
-    nota2=db.Column(db.Integer, nullable=True)
-    nota3=db.Column(db.Integer, nullable=True)
-    materia_id=db.Column(db.Integer,db.ForeignKey("materia.id"),nullable=False) 
-    materia=db.relationship("Materia",backref=db.backref("nota",lazy=True)) 
-    aluno_id=db.Column(db.Integer,db.ForeignKey("aluno.id"),nullable=False) 
-    aluno=db.relationship("Aluno",backref=db.backref("notas",lazy=True))    
-
-    def media(self):
-        media=(self.default(self.nota1)+
-                self.default(self.nota2)+
-                self.default(self.nota3))/3
-        return round(media,1)
+login_manager.login_view="login" 
     
     
-    def default(self, value):
-       return value or 0
-    
-
-    def css(self, nota):
         
-        if (nota==None or nota==""):
-        
-            return "border rounded px-2 py-1 border-secondary text-secondary bg-secondary bg-opacity-25 fw-bold"
-        elif (nota >= 7):
-            return "border rounded px-2 py-1 border-success text-success bg-success bg-opacity-25 fw-bold"
-        elif (nota >= 5):
-            return "border rounded px-2 py-1 border-warning text-warning bg-warning bg-opacity-25 fw-bold"
-        else:
-            return "border rounded px-2 py-1 border-danger text-danger bg-danger bg-opacity-25 fw-bold"
-         
-        
-
+       
         
         
   
@@ -78,18 +36,30 @@ with app.app_context():
     db.create_all()
 
 
-@app.route("/")
+@app.route("/") 
 def index():
-    return render_template('index.html')
+    if current_user.is_authenticated:
+        return redirect( url_for("inicio")) 
+    else: 
+        return redirect(url_for("login"))
+    
+
+@app.route("/inicio")
+@login_required 
+def inicio():
 
 
-@app.route("/escolas") 
+    return render_template('inicio.html') 
+
+@app.route("/escolas")
+@login_required  
 def escolas():
     escolas=Escola.query.all()
     return render_template('escolas.html',escolas=escolas) 
 
 
 @app.route("/cadastrar_escola", methods=["GET", "POST"])
+@login_required 
 def cadastrar_escola():
     if request.method=="POST":
 
@@ -106,6 +76,7 @@ def cadastrar_escola():
 
 
 @app.route("/cadastrar_materia", methods=["POST"])
+@login_required 
 def cadastrar_materia():
     if request.method=="POST":
 
@@ -121,12 +92,13 @@ def cadastrar_materia():
 
 
 @app.route("/alunos") 
+@login_required 
 def alunos():
     alunos=Aluno.query.all()
     return render_template('alunos.html',alunos=alunos) 
 
 
-@app.route("/aluno", methods=["GET","POST"])
+@app.route("/cadastrar", methods=["GET","POST"])
 def cadastrar_alunos():
     if request.method=="POST":
     
@@ -134,19 +106,34 @@ def cadastrar_alunos():
         if not nome:
             return "O nome e a série é obrigatório"
         serie=request.form.get("serie")
-        escola_id=request.form.get("escola_id")
-        aluno=Aluno(nome=nome, serie=serie, escola_id=escola_id)
+        escola_id=request.form.get("escola_id") 
+        
+        email=request.form.get("email")
+        if not email:
+            return "O email é obrigatório" 
+        
+        confirmacao_senha=request.form.get("confirmacao_senha")
+        senha=request.form.get("senha")
+        print (senha,confirmacao_senha)
+        if senha != confirmacao_senha: 
+            return "As senhas são diferentes" 
+        
+        hash_senha=generate_password_hash(senha) 
+        aluno=Aluno(nome=nome, serie=serie, escola_id=escola_id, email=email, senha=hash_senha)
         
         db.session.add(aluno)
         db.session.commit()
+
+
     
         return redirect(url_for("alunos"))
     else:
         escolas=Escola.query.all()
-        return render_template('aluno.html',escolas=escolas)
+        return render_template('cadastrar.html',escolas=escolas)
     
     
 @app.route("/cadastrar_nota", methods=["GET", "POST"])
+@login_required 
 def cadastrar_nota():
     if request.method=="POST":
         nota1=request.form.get('nota1')
@@ -177,6 +164,7 @@ def cadastrar_nota():
 # @app.route("/cadastrar_nota:<aluno_id>" , methods=['GET', "POST"])
 
 @app.route("/deletar_nota", methods=["GET"])
+@login_required 
 def deletar_nota():
     id=request.args.get("nota_id")
     nota=Nota.query.get(id)
@@ -185,6 +173,7 @@ def deletar_nota():
     return redirect(url_for("alunos"))
 
 @app.route("/atualizar_nota", methods=["POST"])
+@login_required 
 def atualizar_nota():
     id=request.form.get("nota_id")
     nota1=request.form.get("nota1")
@@ -196,7 +185,38 @@ def atualizar_nota():
     nota.nota3=nota3
     db.session.add(nota)
     db.session.commit()
-    return redirect(url_for("alunos"))
+    return redirect(url_for("alunos")) 
+
+@app.route("/login", methods=["GET", "POST"])
+def login():
+    
+    if request.method=="POST":
+        #Pega os valores que o usuário digitou na tela
+        email=request.form.get("email")
+        senha=request.form.get("senha")
+
+        #Busca o aluno no banco de dados usando o email 
+
+        user_aluno=Aluno.query.filter_by(email=email).first()
+
+        #Verifica se existe o aluno com o email incerido e se a senha digitada é a mesma senha 
+        #que o aluno cadastrou
+        if user_aluno and check_password_hash (user_aluno.senha,senha):
+           #Loga o aluno no sistema e redireciona para a tela inicial 
+            login_user(user_aluno)
+            return redirect(url_for("index")) 
+        else: 
+            return"login inválido, email ou senha incorretos."
+
+    else:
+        return render_template("login.html")
+    
+@app.route("/sair", methods=["GET"])
+@login_required 
+def sair():
+    logout_user()
+    return redirect(url_for("login"))
+
 
 
 if __name__ == '__main__':

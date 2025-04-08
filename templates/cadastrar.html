@@ -1,16 +1,21 @@
-{% extends "main.html" %}
+{% extends "main2.html" %}
 
 {% block content %}
 <div class="container mt-4">
     <div class="text-center mb-4">
-        <h2 class="display-5 text-primary fw-bold">Bem-Vindo(a) Alunos!</h2>
+        <h2 class="display-5 text-primary fw-bold">Cadastre-se</h2>
         <p class="text-muted">Preencha os campos abaixo para cadastrar um novo aluno.</p>
     </div>
 
-    <form action="/aluno" method="POST" class="border p-4 rounded shadow-sm">
+    <form action="/cadastrar" method="POST" class="border p-4 rounded shadow-sm">
         <div class="mb-3">
             <label for="nome" class="form-label">Nome:</label>
             <input type="text" name="nome" class="form-control" required>
+        </div>
+        
+        <div class="mb-3">
+            <label for="email" class="form-label">Email:</label>
+            <input type="email" name="email" class="form-control" required placeholder="exemplo@email.com">
         </div>
 
         <div class="mb-3">
@@ -27,9 +32,22 @@
             </select>
         </div>
 
+        <div class="mb-3">
+            <label for="senha" class="form-label">Senha:</label>
+            <input type="password" name="senha" class="form-control" required>
+        </div>
+
+        <div class="mb-3">
+            <label for="confirmacao_senha" class="form-label">Confirmar senha:</label>
+            <input type="password" name="confirmacao_senha" class="form-control" required>
+        </div>
+
         <div class="text-center">
             <button type="submit" class="btn btn-primary btn-lg">Enviar</button>
         </div>
-    </form>
+    </form>  
+    <div class="text-center">
+        ou <a href="/login">Ou Entre</a>
+      </div>
 </div>
 {% endblock %}
