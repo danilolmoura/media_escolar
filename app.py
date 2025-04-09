@@ -3,7 +3,7 @@ import random
 
 from flask import Flask, redirect, render_template, request, url_for
 from flask_sqlalchemy import SQLAlchemy
-from models import db, Aluno, Escola, Materia
+from models import db, Aluno, Escola, Materia,Nota
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import LoginManager, login_user, login_required, current_user, logout_user
 app = Flask(__name__)
@@ -38,6 +38,7 @@ with app.app_context():
 
 @app.route("/") 
 def index():
+    
     if current_user.is_authenticated:
         return redirect( url_for("inicio")) 
     else: 
