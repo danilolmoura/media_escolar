@@ -17,6 +17,7 @@ class Materia(db.Model):
     serie=db.Column(db.Integer,nullable=False)
     escola_id=db.Column(db.Integer,db.ForeignKey("escola.id"),nullable=False) 
     escola=db.relationship("Escola",backref=db.backref("materias",lazy=True)) 
+    __table_args__ = (db.UniqueConstraint('nome', 'serie', 'escola_id', name='unique_materia'),)
 
 class Aluno( UserMixin, db.Model):
     id=db.Column(db.Integer, primary_key=True)
@@ -25,9 +26,10 @@ class Aluno( UserMixin, db.Model):
     escola_id=db.Column(db.Integer,db.ForeignKey("escola.id"),nullable=False) 
     escola=db.relationship("Escola",backref=db.backref("alunos",lazy=True)) 
 
+
     email=db.Column(db.String, nullable=False)
     senha=db.Column(db.String, nullable=False)
-
+    __table_args__ = (db.UniqueConstraint( 'email', name='unique_email'),)
 class Nota(db.Model):
     id=db.Column(db.Integer, primary_key=True)
     nota1=db.Column(db.Integer, nullable=True)

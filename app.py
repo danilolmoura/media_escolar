@@ -1,6 +1,6 @@
 import os
 import random
-
+from flask_migrate import Migrate
 from flask import Flask, redirect, render_template, request, url_for
 from flask_sqlalchemy import SQLAlchemy
 from models import db, Aluno, Escola, Materia,Nota
@@ -14,6 +14,7 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///banco_notas.db'
 app.config['SQLALCHEMY_TRACK_NOTIFICATIONS'] = True
 app.config['SECRET_KEY']="*****112" 
 db.init_app(app) 
+migrate=Migrate(app,db)
 login_manager=LoginManager()
 login_manager. init_app(app)
 
@@ -50,17 +51,19 @@ def index():
 def inicio():
 
 
-    return render_template('inicio.html') 
+    return render_template('inicio.html', aluno=current_user) 
 
-@app.route("/escolas")
+@app.route("/materias")
 @login_required  
 def escolas():
-    escolas=Escola.query.all()
-    return render_template('escolas.html',escolas=escolas) 
+    escolas=Escola.query.filter(Escola.id==current_user.escola_id).all()
+    
+    return render_template('materias.html',escolas=escolas) 
+
 
 
 @app.route("/cadastrar_escola", methods=["GET", "POST"])
-@login_required 
+# @login_required 
 def cadastrar_escola():
     if request.method=="POST":
 
@@ -85,10 +88,13 @@ def cadastrar_materia():
         serie=request.form.get("serie")
         escola_id=request.form.get("escola_id")
         materia=Materia(nome=nome, serie=serie, escola_id=escola_id)
-        
         db.session.add(materia)
-        db.session.commit()
-    
+        try:
+            db.session.commit()
+        except Exception as e:
+            print("erro ao cadastrar matéria", e)  
+            db.session.rollback()
+                 
         return redirect(url_for("escolas"))
 
 
@@ -96,11 +102,12 @@ def cadastrar_materia():
 @login_required 
 def alunos():
     alunos=Aluno.query.all()
-    return render_template('alunos.html',alunos=alunos) 
+    return render_template('alunos.html',alunos=alunos, aluno=current_user) 
 
 
 @app.route("/cadastrar", methods=["GET","POST"])
 def cadastrar_alunos():
+
     if request.method=="POST":
     
         nome=request.form.get("nome")
@@ -123,7 +130,11 @@ def cadastrar_alunos():
         aluno=Aluno(nome=nome, serie=serie, escola_id=escola_id, email=email, senha=hash_senha)
         
         db.session.add(aluno)
-        db.session.commit()
+        try:
+            db.session.commit()
+        except Exception as e:
+
+            print ("Ocorreu um erro:", e)
 
 
     
@@ -150,7 +161,7 @@ def cadastrar_nota():
         db.session.add(nota)
         db.session.commit()
         notas=Nota.query.all()
-        return render_template('alunos.html') 
+        return redirect(url_for('alunos')) 
         
     else: 
         notas=Nota.query.all() 
