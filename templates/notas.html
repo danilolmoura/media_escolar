@@ -5,6 +5,9 @@
 
     <h1 class="text-center text-primary fw-bold">Calcule suas médias, {{ aluno.nome }}!</h1>
     <hr>
+    <h1>
+        Escola: {{aluno.escola.nome}}
+    </h1>
 
     {% for aluno in alunos %}
     <div class="card shadow-sm mb-4">

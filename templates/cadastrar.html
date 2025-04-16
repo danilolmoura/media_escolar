@@ -8,6 +8,25 @@
     </div>
 
     <form action="/cadastrar" method="POST" class="border p-4 rounded shadow-sm">
+        {% if escolas|length >0 %}
+        <div class="mb-3">
+            <label for="escola" class="form-label">Escola:</label>
+            <select class="form-select" name="escola_id" size="3" aria-label="Size 3 select example" required>
+                {% for escola in escolas %}
+                <option value="{{ escola.id }}">{{ escola.nome }}</option>
+                {% endfor %}
+            </select>
+        </div> 
+        {% else %} 
+        
+        <div class="mb-3">
+           
+            
+            <label for="escola_nome" class="form-label">Escola:</label>
+            <input type="text" name="escola_nome" class="form-control" >
+
+        </div><hr>
+        {% endif %}
         <div class="mb-3">
             <label for="nome" class="form-label">Nome:</label>
             <input type="text" name="nome" class="form-control" required>
@@ -23,14 +42,7 @@
             <input type="number" name="serie" class="form-control" required>
         </div>
 
-        <div class="mb-3">
-            <label for="escola" class="form-label">Escola:</label>
-            <select class="form-select" name="escola_id" size="3" aria-label="Size 3 select example" required>
-                {% for escola in escolas %}
-                <option value="{{ escola.id }}">{{ escola.nome }}</option>
-                {% endfor %}
-            </select>
-        </div>
+        
 
         <div class="mb-3">
             <label for="senha" class="form-label">Senha:</label>

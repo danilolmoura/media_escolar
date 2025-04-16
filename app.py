@@ -98,23 +98,30 @@ def cadastrar_materia():
         return redirect(url_for("escolas"))
 
 
-@app.route("/alunos") 
+@app.route("/notas") 
 @login_required 
-def alunos():
+def notas():
     alunos=Aluno.query.all()
-    return render_template('alunos.html',alunos=alunos, aluno=current_user) 
+    return render_template('notas.html',alunos=alunos, aluno=current_user) 
 
 
 @app.route("/cadastrar", methods=["GET","POST"])
 def cadastrar_alunos():
 
     if request.method=="POST":
-    
+        escola_id=request.form.get("escola_id") 
+        if  not escola_id:
+            escola_nome=request.form.get("escola_nome")
+            escola=Escola(nome=escola_nome) 
+            db.session.add(escola)
+            db.session.commit()
+            escola_id=escola.id
+
         nome=request.form.get("nome")
         if not nome:
             return "O nome e a série é obrigatório"
         serie=request.form.get("serie")
-        escola_id=request.form.get("escola_id") 
+       
         
         email=request.form.get("email")
         if not email:
@@ -127,7 +134,8 @@ def cadastrar_alunos():
             return "As senhas são diferentes" 
         
         hash_senha=generate_password_hash(senha) 
-        aluno=Aluno(nome=nome, serie=serie, escola_id=escola_id, email=email, senha=hash_senha)
+        
+        aluno=Aluno(nome=nome, serie=serie, escola_id=escola.id, email=email, senha=hash_senha )
         
         db.session.add(aluno)
         try:
@@ -138,7 +146,7 @@ def cadastrar_alunos():
 
 
     
-        return redirect(url_for("alunos"))
+        return redirect(url_for("notas"))
     else:
         escolas=Escola.query.all()
         return render_template('cadastrar.html',escolas=escolas)
@@ -161,7 +169,7 @@ def cadastrar_nota():
         db.session.add(nota)
         db.session.commit()
         notas=Nota.query.all()
-        return redirect(url_for('alunos')) 
+        return redirect(url_for('notas')) 
         
     else: 
         notas=Nota.query.all() 
@@ -182,7 +190,7 @@ def deletar_nota():
     nota=Nota.query.get(id)
     db.session.delete(nota)
     db.session.commit()
-    return redirect(url_for("alunos"))
+    return redirect(url_for("notas"))
 
 @app.route("/atualizar_nota", methods=["POST"])
 @login_required 
@@ -197,7 +205,7 @@ def atualizar_nota():
     nota.nota3=nota3
     db.session.add(nota)
     db.session.commit()
-    return redirect(url_for("alunos")) 
+    return redirect(url_for("notas")) 
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
