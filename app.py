@@ -90,6 +90,9 @@ def cadastrar_materia():
         materia=Materia(nome=nome, serie=serie, escola_id=escola_id)
         db.session.add(materia)
         try:
+            
+            nota=Nota(materia=materia,aluno_id=current_user.id)
+            db.session.add(nota)
             db.session.commit()
         except Exception as e:
             print("erro ao cadastrar matéria", e)  
@@ -102,6 +105,9 @@ def cadastrar_materia():
 @login_required 
 def notas():
     alunos=Aluno.query.all()
+ 
+   
+   
     return render_template('notas.html',alunos=alunos, aluno=current_user) 
 
 
@@ -151,35 +157,6 @@ def cadastrar_alunos():
         escolas=Escola.query.all()
         return render_template('cadastrar.html',escolas=escolas)
     
-    
-@app.route("/cadastrar_nota", methods=["GET", "POST"])
-@login_required 
-def cadastrar_nota():
-    if request.method=="POST":
-        nota1=request.form.get('nota1')
-        nota2=request.form.get('nota2')
-        nota3=request.form.get('nota3')
-        materia_id=request.form.get('materia_id')
-        aluno_id=request.form.get('aluno_id')
-
-
-
-     
-        nota=Nota(nota1=nota1, nota2=nota2, nota3=nota3, materia_id=materia_id, aluno_id=aluno_id)
-        db.session.add(nota)
-        db.session.commit()
-        notas=Nota.query.all()
-        return redirect(url_for('notas')) 
-        
-    else: 
-        notas=Nota.query.all() 
-        # import pdb 
-        # pdb.set_trace()
-        alunos=Aluno.query.all()   
-        aluno_id=request.args.get('aluno_id')
-        aluno=Aluno.query.filter(Aluno.id==aluno_id).first() 
-        return render_template('nota.html',escola=aluno.escola,aluno=aluno)
-
     
 # @app.route("/cadastrar_nota:<aluno_id>" , methods=['GET', "POST"])
 
