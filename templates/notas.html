@@ -45,7 +45,7 @@
                                         <span class="{{nota.css(nota.nota1)}}" data-bs-toggle="collapse"
                                             data-bs-target="#editableInput1-{{nota.id}}" aria-expanded="false"
                                             aria-controls="editableInput1-{{nota.id}}" style="cursor: pointer;">
-                                            {{ nota.nota1 | default("")}}
+                                            {{ "-" if not nota.nota1 else nota.nota1}}
                                         </span>
                                 
                                         <div class="collapse ms-2" id="editableInput1-{{nota.id}}">
@@ -60,7 +60,7 @@
                                         <span class="{{nota.css(nota.nota2)}}" data-bs-toggle="collapse"
                                             data-bs-target="#editableInput2-{{nota.id}}" aria-expanded="false"
                                             aria-controls="editableInput2-{{nota.id}}" style="cursor: pointer;">
-                                            {{ nota.nota2 | default("")}}
+                                            {{ "-" if not nota.nota2 else nota.nota2}}
                                         </span>
                                 
                                         <div class="collapse ms-2" id="editableInput2-{{nota.id}}">
@@ -75,7 +75,7 @@
                                             <span class="{{nota.css(nota.nota3)}}" data-bs-toggle="collapse"
                                                 data-bs-target="#editableInput3-{{nota.id}}" aria-expanded="false"
                                                 aria-controls="editableInput3-{{nota.id}}" style="cursor: pointer;">
-                                                {{ nota.nota3 | default("")}}
+                                                {{ "-" if not nota.nota3 else nota.nota3}}
                                             </span>
 
                                     

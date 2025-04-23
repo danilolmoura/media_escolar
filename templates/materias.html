@@ -38,17 +38,26 @@
             <div class="mb-3">
                 <label for="nome" class="form-label">Nome da Matéria</label>
                 <input type="text" name="nome" class="form-control" id="nome" required>
+                {% if errors.nome %}
+                <div class="text-danger">{{ errors.nome }}</div>
+                {% endif %}
             </div>
 
             <div class="mb-3">
                 <label for="serie" class="form-label">Série</label>
                 <input type="number" name="serie" class="form-control" id="serie" required>
+                {% if errors.serie %}
+                <div class="text-danger">{{ errors.serie }}</div>
+                {% endif %}
             </div>
 
             <button type="submit" class="btn btn-primary">Adicionar Matéria</button>
         </form>
 
         <br><br>
+
+
+
     </div>
     {% endfor %}
 </div>

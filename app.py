@@ -53,13 +53,6 @@ def inicio():
 
     return render_template('inicio.html', aluno=current_user) 
 
-@app.route("/materias")
-@login_required  
-def escolas():
-    escolas=Escola.query.filter(Escola.id==current_user.escola_id).all()
-    
-    return render_template('materias.html',escolas=escolas) 
-
 
 
 @app.route("/cadastrar_escola", methods=["GET", "POST"])
@@ -79,13 +72,35 @@ def cadastrar_escola():
         return render_template('escola.html',escolas=escolas)
 
 
+def render_materias( errors={}):
+    escolas=Escola.query.filter(Escola.id==current_user.escola_id).all()
+    return render_template('materias.html', escolas=escolas, errors=errors)
+
+@app.route("/materias")
+@login_required  
+def escolas():
+    return render_materias()
+
+
 @app.route("/cadastrar_materia", methods=["POST"])
 @login_required 
 def cadastrar_materia():
+    errors={}
     if request.method=="POST":
 
+        lista_materias=["Matemática","Português","História","Geografia","Ciências", "Educação Física","Artes","Inglês","Filosofia","Sociologia","Química","Biologia","Física", "Educação Religiosa", "Educação Financeira","Espanhol", "Literatura","Educação Ambiental","Tecnologia da Informação","Programação","Robótica"]
+        lista_series=["1","2","3","4","5","6","7","8","9"]
+
+
         nome=request.form.get("nome")
+        if nome not in lista_materias:
+            errors["nome"]="Essa matéria não existe"
+          
         serie=request.form.get("serie")
+        if serie not in lista_series:
+            errors["serie"]="Essa série não existe"
+        if errors:
+            return render_materias(errors=errors) 
         escola_id=request.form.get("escola_id")
         materia=Materia(nome=nome, serie=serie, escola_id=escola_id)
         db.session.add(materia)
@@ -95,10 +110,15 @@ def cadastrar_materia():
             db.session.add(nota)
             db.session.commit()
         except Exception as e:
+            errors["nome"]="Essa matéria já existe"
+
             print("erro ao cadastrar matéria", e)  
             db.session.rollback()
+        if errors:
+            return render_materias(errors=errors)
                  
-        return redirect(url_for("escolas"))
+        return redirect(url_for("escolas" ))
+    
 
 
 @app.route("/notas") 
