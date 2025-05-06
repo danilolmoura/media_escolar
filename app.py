@@ -72,9 +72,9 @@ def cadastrar_escola():
         return render_template('escola.html',escolas=escolas)
 
 
-def render_materias( errors={}):
+def render_materias( errors={},success={}):
     escolas=Escola.query.filter(Escola.id==current_user.escola_id).all()
-    return render_template('materias.html', escolas=escolas, errors=errors)
+    return render_template('materias.html', escolas=escolas, errors=errors, success=success)
 
 @app.route("/materias")
 @login_required  
@@ -188,6 +188,20 @@ def deletar_nota():
     db.session.delete(nota)
     db.session.commit()
     return redirect(url_for("notas"))
+
+
+@app.route("/deletar_materia", methods=["POST"])
+@login_required
+def deletar_materia():
+    materia_id=request.form.get("materia_id")	
+    materia=Materia.query.get(materia_id)
+    for nota in materia.notas:
+        db.session.delete(nota)
+        
+
+    db.session.delete(materia)
+    db.session.commit()
+    return render_materias(success={materia_id:f"Matéria deletada com sucesso"})
 
 @app.route("/atualizar_nota", methods=["POST"])
 @login_required 

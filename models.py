@@ -30,13 +30,14 @@ class Aluno( UserMixin, db.Model):
     email=db.Column(db.String, nullable=False)
     senha=db.Column(db.String, nullable=False)
     __table_args__ = (db.UniqueConstraint( 'email', name='unique_email'),)
+
 class Nota(db.Model):
     id=db.Column(db.Integer, primary_key=True)
     nota1=db.Column(db.Integer, nullable=True)
     nota2=db.Column(db.Integer, nullable=True)
     nota3=db.Column(db.Integer, nullable=True)
     materia_id=db.Column(db.Integer,db.ForeignKey("materia.id"),nullable=False) 
-    materia=db.relationship("Materia",backref=db.backref("nota",lazy=True)) 
+    materia=db.relationship("Materia",backref=db.backref("notas",lazy=True)) 
     aluno_id=db.Column(db.Integer,db.ForeignKey("aluno.id"),nullable=False) 
     aluno=db.relationship("Aluno",backref=db.backref("notas",lazy=True))    
 

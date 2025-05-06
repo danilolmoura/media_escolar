@@ -2,6 +2,16 @@
 
 {% block content %}
 <div class="container mt-4">
+    {% for item, mensage in success.items() %}
+    <div class="toast align-items-center" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="d-flex">
+          <div class="toast-body">
+         {{mensage}}
+         </div>
+          <button type="button" class="btn-close me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+      </div>
+      {% endfor %}
     <div class="display-5 text-center text-primary fw-bold">
         Cadastre suas matérias abaixo!
     </div>
@@ -18,6 +28,7 @@
                     <tr>
                         <th>Nome</th>
                         <th>Série</th>
+                        <th>Ações</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -25,6 +36,16 @@
                     <tr>
                         <td>{{ materia.nome }}</td>
                         <td>{{ materia.serie }}</td>
+                        <td>
+                            <form action="/deletar_materia" method="POST" class="d-inline">
+                                <input type="hidden" name="materia_id" value="{{ materia.id }}">
+                                <button type="submit" class="btn btn-danger btn-sm">Deletar</button>
+                            </form>
+                            <form action="/editar_materia" method="GET" class="d-inline">
+                                <input type="hidden" name="materia_id" value="{{ materia.id }}">
+                                <button type="submit" class="btn btn-warning btn-sm">Editar</button>
+                            </form>
+                        </td>
                     </tr>
                     {% endfor %}
                 </tbody>
