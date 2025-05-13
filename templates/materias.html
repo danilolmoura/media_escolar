@@ -3,12 +3,15 @@
 {% block content %}
 <div class="container mt-4">
     {% for item, mensage in success.items() %}
-    <div class="toast align-items-center" role="alert" aria-live="assertive" aria-atomic="true">
-        <div class="d-flex">
-          <div class="toast-body">
-         {{mensage}}
-         </div>
-          <button type="button" class="btn-close me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+    <div class="toast position-absolute end-0 bottom-0 me-3 mb-3" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="toast-header">
+          <img src="{{ url_for('static', filename='logo.png') }}" class="rounded me-2" alt="..." style="width: 25px; height: 25px;">
+          <strong class="me-auto">Sucesso!</strong>
+          <small class="text-muted">Agora a pouco</small>
+          <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+        <div class="toast-body">
+          {{mensage}}
         </div>
       </div>
       {% endfor %}
@@ -33,10 +36,10 @@
                 </thead>
                 <tbody>
                     {% for materia in escola.materias %}
-                    <tr>
-                        <td>{{ materia.nome }}</td>
-                        <td>{{ materia.serie }}</td>
-                        <td>
+                    <tr >
+                        <td class="text-start">{{ materia.nome }}</td>
+                        <td class="text-start">{{ materia.serie }}</td>
+                        <td class="text-start">
                             <form action="/deletar_materia" method="POST" class="d-inline">
                                 <input type="hidden" name="materia_id" value="{{ materia.id }}">
                                 <button type="submit" class="btn btn-danger btn-sm">Deletar</button>

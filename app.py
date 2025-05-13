@@ -198,10 +198,11 @@ def deletar_materia():
     for nota in materia.notas:
         db.session.delete(nota)
         
-
+    materia_nome=materia.nome
     db.session.delete(materia)
     db.session.commit()
-    return render_materias(success={materia_id:f"Matéria deletada com sucesso"})
+
+    return render_materias(success={materia_id:f"Matéria deletada com sucesso: {materia_nome}"})
 
 @app.route("/atualizar_nota", methods=["POST"])
 @login_required 

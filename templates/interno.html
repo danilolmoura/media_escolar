@@ -19,9 +19,9 @@
         <header class="d-flex flex-wrap justify-content-center py-3 mb-4 border-bottom">
             <a href="/"
                 class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-body-emphasis text-decoration-none">
-                <svg class="bi me-2" width="40" height="32">
-                    <use xlink:href="#bootstrap"></use>
-                </svg>
+                
+              
+                <img src="{{ url_for('static', filename='logo.png') }}" class="rounded me-2" alt="..." style="width: 40px; height: 32px;">
                 <span class="fs-4">Media Escolar</span>
             </a>
 
@@ -63,7 +63,7 @@
         document.addEventListener('DOMContentLoaded', function () {
             const toastElList = document.querySelectorAll('.toast');
             toastElList.forEach(toastEl => {
-            const toast = new bootstrap.Toast(toastEl, { delay: 3000 });
+            const toast = new bootstrap.Toast(toastEl, { delay: 4000 });
             toast.show();
             });
         });
