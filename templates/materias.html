@@ -1,6 +1,7 @@
 {% extends "interno.html" %}
 
 {% block content %}
+
 <div class="container mt-4">
     {% for item, mensage in success.items() %}
     <div class="toast position-absolute end-0 bottom-0 me-3 mb-3" role="alert" aria-live="assertive" aria-atomic="true">
@@ -15,16 +16,43 @@
         </div>
       </div>
       {% endfor %}
-    <div class="display-5 text-center text-primary fw-bold">
-        Cadastre suas matérias abaixo!
+    <div class="mb-4">
+        <h2 class="text-center text-primary fw-bold">
+            Cadastre suas matérias!
+        </h2>
+        <form action="/cadastrar_materia" method="POST" class="border p-4 rounded shadow-sm">
+            <input type="hidden" name="escola_id" value="{{ escola.id }}">
+            <div class="mb-3">
+                <label for="nome" class="form-label">Nome da Matéria</label>
+                <input type="text" name="nome" class="form-control" id="nome" required>
+                {% if errors.nome %}
+                <div class="text-danger">{{ errors.nome }}</div>
+                {% endif %}
+            </div>
+    
+            <div class="mb-3">
+                <label for="serie" class="form-label">Série</label>
+                <input type="number" name="serie" class="form-control" id="serie" required>
+                {% if errors.serie %}
+                <div class="text-danger">{{ errors.serie }}</div>
+                {% endif %}
+            </div>
+    
+            <button type="submit" class="btn btn-primary">Adicionar Matéria</button>
+        </form> 
+        <br>
+       
     </div>
     <hr>
 
+
+
+    
     {% for escola in escolas %}
     <div class="mb-5">
-        <h4 class="text-dark">{{ escola.nome }}</h4>
+        <h3 class="text-dark">{{ escola.nome }}</h3>
 
-        <h5>Matérias:</h5>
+        <h4>Matérias:</h4>
         <div class="table-responsive">
             <table class="table table-striped table-hover">
                 <thead class="table-dark">
@@ -44,41 +72,13 @@
                                 <input type="hidden" name="materia_id" value="{{ materia.id }}">
                                 <button type="submit" class="btn btn-danger btn-sm">Deletar</button>
                             </form>
-                            <form action="/editar_materia" method="GET" class="d-inline">
-                                <input type="hidden" name="materia_id" value="{{ materia.id }}">
-                                <button type="submit" class="btn btn-warning btn-sm">Editar</button>
-                            </form>
+                           
                         </td>
                     </tr>
                     {% endfor %}
                 </tbody>
             </table>
         </div>
-
-        <br>
-
-        <form action="/cadastrar_materia" method="POST" class="border p-4 rounded shadow-sm">
-            <input type="hidden" name="escola_id" value="{{ escola.id }}">
-            <div class="mb-3">
-                <label for="nome" class="form-label">Nome da Matéria</label>
-                <input type="text" name="nome" class="form-control" id="nome" required>
-                {% if errors.nome %}
-                <div class="text-danger">{{ errors.nome }}</div>
-                {% endif %}
-            </div>
-
-            <div class="mb-3">
-                <label for="serie" class="form-label">Série</label>
-                <input type="number" name="serie" class="form-control" id="serie" required>
-                {% if errors.serie %}
-                <div class="text-danger">{{ errors.serie }}</div>
-                {% endif %}
-            </div>
-
-            <button type="submit" class="btn btn-primary">Adicionar Matéria</button>
-        </form>
-
-        <br><br>
 
 
 

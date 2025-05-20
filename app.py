@@ -74,7 +74,7 @@ def cadastrar_escola():
 
 def render_materias( errors={},success={}):
     escolas=Escola.query.filter(Escola.id==current_user.escola_id).all()
-    return render_template('materias.html', escolas=escolas, errors=errors, success=success)
+    return render_template('materias.html', escolas=escolas, escola= current_user.escola, errors=errors, success=success)
 
 @app.route("/materias")
 @login_required  
