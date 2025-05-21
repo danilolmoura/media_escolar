@@ -1,4 +1,5 @@
 import os
+import psycopg2
 import random
 from flask_migrate import Migrate
 from flask import Flask, redirect, render_template, request, url_for
@@ -7,12 +8,19 @@ from models import db, Aluno, Escola, Materia,Nota
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import LoginManager, login_user, login_required, current_user, logout_user
 app = Flask(__name__)
+ENV=os.environ.get("ENV", "dev")
+if ENV=="dev":
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///banco_notas.db'
+else:
+    database_url=os.environ["DATABASE_URL"]
+    if database_url.startswith("postgres://"):
+        database_url=database_url.replace("postgres://", "postgresql://", 1)
 
-
-# Configura banco de dados
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///banco_notas.db'
-app.config['SQLALCHEMY_TRACK_NOTIFICATIONS'] = True
+app.config['SQLALCHEMY_DATABASE_URI'] = database_url
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False 
+app.config['SQLALCHEMY_ECHO'] = True
 app.config['SECRET_KEY']="*****112" 
+
 db.init_app(app) 
 migrate=Migrate(app,db)
 login_manager=LoginManager()
