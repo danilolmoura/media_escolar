@@ -132,11 +132,11 @@ def cadastrar_materia():
 @app.route("/notas") 
 @login_required 
 def notas():
-    alunos=Aluno.query.all()
+    
  
    
    
-    return render_template('notas.html',alunos=alunos, aluno=current_user) 
+    return render_template('notas.html', aluno=current_user) 
 
 
 @app.route("/cadastrar", methods=["GET","POST"])
