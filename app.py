@@ -169,7 +169,7 @@ def cadastrar_alunos():
         
         hash_senha=generate_password_hash(senha) 
         
-        aluno=Aluno(nome=nome, serie=serie, escola_id=escola.id, email=email, senha=hash_senha )
+        aluno=Aluno(nome=nome, serie=serie, escola_id=escola_id, email=email, senha=hash_senha )
         
         db.session.add(aluno)
         try:
