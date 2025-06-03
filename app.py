@@ -1,6 +1,8 @@
 import os
 import psycopg2
 import random
+from itsdangerous import URLSafeTimedSerializer
+from flask_mail import Mail, Message
 from flask_migrate import Migrate
 from flask import Flask, redirect, render_template, request, url_for
 from flask_sqlalchemy import SQLAlchemy
@@ -8,6 +10,8 @@ from models import db, Aluno, Escola, Materia,Nota
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import LoginManager, login_user, login_required, current_user, logout_user
 app = Flask(__name__)
+
+
 ENV=os.environ.get("ENV", "dev")
 if ENV=="dev":
     app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///banco_notas.db'
@@ -16,10 +20,24 @@ else:
     if database_url.startswith("postgres://"):
         database_url=database_url.replace("postgres://", "postgresql://", 1)
 
-app.config['SQLALCHEMY_DATABASE_URI'] = database_url
+    app.config['SQLALCHEMY_DATABASE_URI'] = database_url
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False 
 app.config['SQLALCHEMY_ECHO'] = True
 app.config['SECRET_KEY']="*****112" 
+
+app.config['MAIL_SERVER']='smtp-relay.brevo.com'
+app.config['MAIL_PORT'] = 587
+app.config['MAIL_USERNAME'] = '8eb995001@smtp-brevo.com'
+app.config['MAIL_PASSWORD'] = 'VTd38CMpNFx5P4QL'
+
+app.config['MAIL_USE_TLS'] = False
+app.config['MAIL_USE_SSL'] = False  
+app.config['MAIL_DEFAULT_SENDER'] = '8eb995001@smtp-brevo.com'
+
+
+
+mail=Mail(app)
+serializer=URLSafeTimedSerializer(app.config['SECRET_KEY'])
 
 db.init_app(app) 
 migrate=Migrate(app,db)
@@ -257,6 +275,29 @@ def sair():
     logout_user()
     return redirect(url_for("login"))
 
+
+@app.route("/recuperar_senha", methods=["GET", "POST"])
+def recuperar_senha():
+    if request.method == "POST":
+        email = request.form.get("email")
+        aluno = Aluno.query.filter_by(email=email).first()
+        if aluno:
+            token= serializer.dumps(email, salt='recover-key') 
+            link = url_for('redefinir_senha', token=token, _external=True)
+            msg=Message("Recuperação de Senha", recipients=[email])
+            msg.body=f"Use este link para redefinir sua senha: {link}, se não foi você que solicitou a recuperação de senha, ignore este email."
+            mail.send(msg)
+            return render_template("recuperar_senha.html", success="Um email foi enviado com o link para redefinir sua senha.")
+
+
+    else:
+        return render_template("recuperar_senha.html")
+
+@app.route("/redefinir_senha/<token>", methods=["GET", "POST"])
+
+def redefinir_senha(token):
+    
+    return render_template("redefinir_senha.html", token=token)
 
 
 if __name__ == '__main__':

@@ -4,25 +4,22 @@
 <div class="container mt-4">
 
 <main class="form-signin w-100 m-auto">
-  <form action="/login" method="POST">
+  <form action="/recuperar_senha" method="POST">
     <img class="mb-4" src="{{ url_for('static', filename='logo.png') }}" alt="" width="72" height="57">
-    <h1 class="h3 mb-3 fw-normal">Entrar:</h1>
+    <h1 class="h3 mb-3 fw-normal">Recuperar senha:</h1>
 
     <div class="form-floating">
       <input type="email" class="form-control" id="email" placeholder="name@example.com" name="email">
       <label for="email">Endereço de Email</label>
     </div>
-    <div class="form-floating">
-      <input type="password" class="form-control" id="senha" placeholder="Password" name="senha">
-      <label for="senha">Senha</label>
-    </div>
+   
 
     
-    <button class="btn btn-primary w-100 py-2" type="submit">Entrar</button>
+    <button class="btn btn-primary w-100 py-2" type="submit">Recuperar</button>
     <p class="mt-5 mb-3 text-body-secondary">© 2025</p>
   </form>
    <div class="text-center">
-    <a href="/recuperar_senha"> Recuperar Senha</a>
+    <a href="/login"> Entrar</a>
     ou <a href="/cadastrar">Cadastre-se</a>
     
   </div>
