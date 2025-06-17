@@ -4,7 +4,7 @@
 <div class="container mt-4">
 
 <main class="form-signin w-100 m-auto">
-  <form action="/recuperar_senha" method="POST">
+  <form action="{{ url_for('redefinir_senha', token=token) }}" method="POST">
     <img class="mb-4" src="{{ url_for('static', filename='logo.png') }}" alt="" width="72" height="57">
     <h1 class="h3 mb-3 fw-normal">Nova senha:</h1>
 

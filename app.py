@@ -25,13 +25,12 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_ECHO'] = True
 app.config['SECRET_KEY']="*****112" 
 
-app.config['MAIL_SERVER']='smtp-relay.brevo.com'
+app.config['MAIL_SERVER']='smtp.gmail.com'
 app.config['MAIL_PORT'] = 587
-app.config['MAIL_USERNAME'] = '8eb995001@smtp-brevo.com'
-app.config['MAIL_PASSWORD'] = 'VTd38CMpNFx5P4QL'
+app.config['MAIL_USERNAME'] = 'rebekahsarah002@gmail.com'
+app.config['MAIL_PASSWORD'] = 'bewj wubz llge cnrl'
 
-app.config['MAIL_USE_TLS'] = False
-app.config['MAIL_USE_SSL'] = False  
+app.config['MAIL_USE_TLS'] = True 
 app.config['MAIL_DEFAULT_SENDER'] = '8eb995001@smtp-brevo.com'
 
 
@@ -296,7 +295,16 @@ def recuperar_senha():
 @app.route("/redefinir_senha/<token>", methods=["GET", "POST"])
 
 def redefinir_senha(token):
-    
+    if request.method=="POST":
+        email= serializer.loads(token, salt="recover-key")
+        senha1= request.form.get("password")
+        senha2= request.form.get("password2")
+        if senha1 == senha2:
+           aluno = Aluno.query.filter_by(email=email).first()
+           aluno.senha=generate_password_hash(senha1)
+           db.session.add(aluno)
+           db.session.commit()
+        return render_template ("login.html")
     return render_template("redefinir_senha.html", token=token)
 
 
