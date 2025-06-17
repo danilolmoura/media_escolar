@@ -284,7 +284,17 @@ def recuperar_senha():
             token= serializer.dumps(email, salt='recover-key') 
             link = url_for('redefinir_senha', token=token, _external=True)
             msg=Message("Recuperação de Senha", recipients=[email])
-            msg.body=f"Use este link para redefinir sua senha: {link}, se não foi você que solicitou a recuperação de senha, ignore este email."
+            logo_url = url_for('static', filename='logo.png')
+            msg.html = f"""
+                <img class="mb-4" src="{ url_for('static', filename='logo.png') }" alt="" width="72" height="57">
+
+                <img height="auto" src="https://ci3.googleusercontent.com/meips/ADKq_NYk9VU6Pi4dE0C_d0p-K_mxwaqbBc6OzAGyXr5zQgpkjPcvaE26ovUSzLd7SmbvO-BPJh1IDh8XDPxQI6s7kvXv87kQKMRA8qSLataDPovp_tE_gcghcldRTjaLM0OXM3P5L4lWUYFFN2Ujmy7U1rf89Pbc4Bg_xKISMzmmMqY=s0-d-e1-ft#https://image.news.grupoenjoei.com.br/lib/fe90137276660c7b76/m/8/9864bde5-9286-4cc4-b041-e532788b25e3.png" style="border:0;display:block;outline:none;text-decoration:none;height:auto;width:100%;font-size:13px" width="40" class="CToWUd" data-bit="iit">
+                <a class="m_4990549332595761893o-button-primary m_4990549332595761893o-button-large" href="{link}">criar novos sonhos</a>
+                
+                <p>Olá {aluno.nome},</p>
+                <p>Use este link para redefinir sua senha: <a href="{link}">{link}</a></p>
+                <p>Se não foi você que solicitou a recuperação de senha, ignore este email.</p>
+                """
             mail.send(msg)
             return render_template("recuperar_senha.html", success="Um email foi enviado com o link para redefinir sua senha.")
 
