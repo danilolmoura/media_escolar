@@ -19,9 +19,10 @@
         <header class="d-flex flex-wrap justify-content-center py-3 mb-4 border-bottom">
             <a href="/"
                 class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-body-emphasis text-decoration-none">
-                
-              
-                <img src="{{ url_for('static', filename='logo.png') }}" class="rounded me-2" alt="..." style="width: 40px; height: 32px;">
+
+
+                <img src="{{ url_for('static', filename='logo.png') }}" class="rounded me-2" alt="..."
+                    style="width: 40px; height: 32px;">
                 <span class="fs-4">Media Escolar</span>
             </a>
 
@@ -33,43 +34,68 @@
                 <li class="nav-item"><a href="/sair" class="nav-link">Sair</a></li>
             </ul>
         </header>
-
         <main>
-            {% block content %}{% endblock %}
+           
+
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+        <div class="container mt-4">
+            {% for category, message in messages %}
+            <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Fechar"></button>
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+        {% endwith %}
+        {% block content %}{% endblock %}
         </main>
     </div>
+    
 
-    <script>
-        // Quando a página carregar, adicionar a classe 'active' ao item correto
-        document.addEventListener("DOMContentLoaded", function() {
-            const navLinks = document.querySelectorAll('.nav-link');
-            
-            // Remove 'active' de todos os links
-            navLinks.forEach(link => {
-                link.classList.remove('active');
+
+
+        <script>
+            // Quando a página carregar, adicionar a classe 'active' ao item correto
+            document.addEventListener("DOMContentLoaded", function () {
+                const navLinks = document.querySelectorAll('.nav-link');
+
+                // Remove 'active' de todos os links
+                navLinks.forEach(link => {
+                    link.classList.remove('active');
+                });
+
+                // Adiciona 'active' ao link da página atual
+                const currentUrl = window.location.pathname;
+                console.log(currentUrl);
+                navLinks.forEach(link => {
+                    if (link.getAttribute('href') === currentUrl) {
+                        link.classList.add('active');
+                    }
+                });
             });
 
-            // Adiciona 'active' ao link da página atual
-            const currentUrl = window.location.pathname;
-            console.log(currentUrl);
-            navLinks.forEach(link => {
-                if (link.getAttribute('href') === currentUrl) {
-                    link.classList.add('active');
-                }
+
+
+            document.addEventListener('DOMContentLoaded', function () {
+                const toastElList = document.querySelectorAll('.toast');
+                toastElList.forEach(toastEl => {
+                    const toast = new bootstrap.Toast(toastEl, { delay: 4000 });
+                    toast.show();
+                });
             });
-        });
-
-        
-        document.addEventListener('DOMContentLoaded', function () {
-            const toastElList = document.querySelectorAll('.toast');
-            toastElList.forEach(toastEl => {
-            const toast = new bootstrap.Toast(toastEl, { delay: 4000 });
-            toast.show();
-            });
-        });
 
 
-    </script>
+
+
+        </script>
+
+
+
+
+
 </body>
 
 

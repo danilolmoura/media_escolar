@@ -13,7 +13,7 @@
             <label for="escola" class="form-label">Escola:</label>
             <select class="form-select" name="escola_id" size="3" aria-label="Size 3 select example" required>
                 {% for escola in escolas %}
-                <option value="{{ escola.id }}">{{ escola.nome }}</option>
+                <option value="{{ escola.id }}">{{ escola.nome.title() }}</option>
                 {% endfor %}
             </select>
         </div> 

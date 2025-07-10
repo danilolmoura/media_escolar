@@ -3,6 +3,7 @@
 {% block content %}
 
 <div class="container mt-4">
+    <!--
     {% for item, mensage in success.items() %}
     <div class="toast position-absolute end-0 bottom-0 me-3 mb-3" role="alert" aria-live="assertive" aria-atomic="true">
         <div class="toast-header">
@@ -15,7 +16,7 @@
           {{mensage}}
         </div>
       </div>
-      {% endfor %}
+      {% endfor %}-->
     <div class="mb-4">
         <h2 class="text-center text-primary fw-bold">
             Cadastre suas matérias!
@@ -50,7 +51,7 @@
     
     {% for escola in escolas %}
     <div class="mb-5">
-        <h3 class="text-dark">{{ escola.nome }}</h3>
+        <h3 class="text-dark">{{ escola.nome.title() }}</h3>
 
         <h4>Matérias:</h4>
         <div class="table-responsive">

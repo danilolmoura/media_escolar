@@ -18,7 +18,7 @@
         <h3 class="text-dark">Escolas Cadastradas:</h3>
         <ul class="list-group">
             {% for escola in escolas %}
-            <li class="list-group-item">{{ escola.nome }}</li>
+            <li class="list-group-item">{{ escola.nome.title() }}</li>
             {% endfor %}
         </ul>
     </div>

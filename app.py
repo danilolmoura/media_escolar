@@ -4,7 +4,7 @@ import random
 from itsdangerous import URLSafeTimedSerializer
 from flask_mail import Mail, Message
 from flask_migrate import Migrate
-from flask import Flask, redirect, render_template, request, url_for
+from flask import Flask, redirect, render_template, request, url_for, flash
 from flask_sqlalchemy import SQLAlchemy
 from models import db, Aluno, Escola, Materia,Nota
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -90,6 +90,7 @@ def cadastrar_escola():
         db.session.add(escola)
         db.session.commit()
         escolas=Escola.query.all()
+        flash("Escola cadastrada com sucesso!", "success")
         return render_template('escola.html',escolas=escolas)
         
     else: 
@@ -140,8 +141,9 @@ def cadastrar_materia():
             print("erro ao cadastrar matéria", e)  
             db.session.rollback()
         if errors:
+            flash("Erro ao cadastrar matéria ", "danger")
             return render_materias(errors=errors)
-                 
+        flash("Matéria cadastrada com sucesso!", "success")        
         return redirect(url_for("escolas" ))
     
 
@@ -191,6 +193,33 @@ def cadastrar_alunos():
         db.session.add(aluno)
         try:
             db.session.commit()
+            msg=Message("Bem-Vindo(a) ao Média Escolar!", recipients=[aluno.email])
+            link = url_for("index", _external=True)
+            logo_url = url_for('static', filename='logo.png', _external=True)
+            msg.html = f"""
+        <div style="font-family: Arial, sans-serif; text-align: center;">
+            <img src="{logo_url}" alt="Logo" width="100" style="margin-bottom: 20px;">
+            <p>Olá <strong>{aluno.nome}</strong>,</p>
+            <p style="font-size: 16px;">
+                Este é o seu espaço exclusivo para acompanhar seu desempenho escolar<br>
+                de forma simples e eficiente.<br><br>
+                Aqui, você terá acesso às suas matérias, notas, atividades e muito mais,<br>
+                tudo pensado para ajudar no seu aprendizado e crescimento.
+            </p>
+            <p>
+                <a href="{link}" style="display: inline-block; padding: 10px 20px; background-color: #007bff; color: white; text-decoration: none; border-radius: 5px;">
+                    Acesse o Site
+                </a>
+            </p>
+        </div>
+        """
+
+            # Envia o email de boas-vindas  
+               
+                
+              
+            mail.send(msg)
+            flash("Aluno cadastrado com sucesso!", "success")
         except Exception as e:
 
             print ("Ocorreu um erro:", e)
@@ -212,6 +241,7 @@ def deletar_nota():
     nota=Nota.query.get(id)
     db.session.delete(nota)
     db.session.commit()
+    flash("Nota deletada com sucesso!", "success")
     return redirect(url_for("notas"))
 
 
@@ -226,8 +256,8 @@ def deletar_materia():
     materia_nome=materia.nome
     db.session.delete(materia)
     db.session.commit()
-
-    return render_materias(success={materia_id:f"Matéria deletada com sucesso: {materia_nome}"})
+    flash(f"Matéria {materia_nome} deletada com sucesso!", "success")
+    return render_materias()
 
 @app.route("/atualizar_nota", methods=["POST"])
 @login_required 
@@ -242,6 +272,8 @@ def atualizar_nota():
     nota.nota3=nota3
     db.session.add(nota)
     db.session.commit()
+    flash("Nota atualizada com sucesso!", "success")
+    
     return redirect(url_for("notas")) 
 
 @app.route("/login", methods=["GET", "POST"])
@@ -297,12 +329,21 @@ def recuperar_senha():
             <p style="color: gray; font-size: 12px;">Se não foi você que solicitou, apenas ignore este e-mail.</p>
                 </div>
                     """
-
+          
                
                 
               
             mail.send(msg)
-            return render_template("recuperar_senha.html", success="Um email foi enviado com o link para redefinir sua senha.")
+            flash("Um email foi enviado com instruções para redefinir sua senha.", "success")
+     
+            return render_template("recuperar_senha.html")
+        
+        else: 
+            flash("Email não encontrado.", "danger")
+            return render_template("recuperar_senha.html")
+
+            
+
 
 
     else:
